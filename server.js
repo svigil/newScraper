@@ -28,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Set up handlebars
+
+
 var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -35,6 +37,8 @@ app.set("view engine", "handlebars");
 // set up the routes
 var router = require("./routes/routes.js");
 app.use("/", router);
+
+
 
 // Start the server
 app.listen(PORT, function () {
