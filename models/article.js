@@ -17,7 +17,7 @@ var articleSchema = new Schema({
         type: String,
         unique: true
     },
-      // This allows us to populate the Article with an associated Note
+    // This allows us to populate the Article with an associated Note
     notes: [{
         type: Schema.Types.ObjectId,
         ref: "Note"

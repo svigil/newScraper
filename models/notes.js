@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 // Using the Schema constructor, create a new UserSchema object
 var noteSchema = new Schema({
-    articleId: {type: Schema.Types.ObjectId, ref: "Article" },
+    articleId: { type: Schema.Types.ObjectId, ref: "Article" },
     body: String,
 });
 
