@@ -1,9 +1,15 @@
-<ul>
+<h2>All articles from Hacker News</h2>
+<a class="page-link" href="/saved">View all saved articles</a>
+<ul class="col s10">
     {{#each Article}}
+    {{#unless this.saved}}
     <li>
-        <a href="{{this.url}}">{{this.headline}}</a>
+        <a class="title" href="{{this.url}}">{{this.headline}}</a>
         <p>{{this.summary}}</p>
         <button data-id="{{this.id}}" class="saveArticle">Save Article</button>
     </li>
+    <hr>
+    <br>
+    {{/unless}}
     {{/each}}
 </ul>

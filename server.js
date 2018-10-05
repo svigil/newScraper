@@ -21,7 +21,7 @@ var PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/week18Populater", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/NewScraper", { useNewUrlParser: true });
 
 // Use body-parser for handling form submissions
 app.use(bodyParser.urlencoded({ extended: true }));

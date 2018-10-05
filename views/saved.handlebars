@@ -1,10 +1,28 @@
-<ul>
+<h2>Saved Articles</h2>
+<a class="page-link" href="/index">Back to all articles</a>
+<ul class="col s10">
     {{#each Article}}
+    {{#if this.saved}}
     <li>
-        <a href="{{this.url}}">{{this.headline}}</a>
+        <a class="title" href="{{this.url}}">{{this.headline}}</a>
         <p>{{this.summary}}</p>
-        <button data-id="{{this.id}}" class="delArticle">Delete</button>
-        <button data-id="{{this.id}}" class="addNote">Add a Note</button>
+        <button data-id="{{this.id}}" class="unsaveArticle">Delete Article</button>
+        <button data-id="{{this.id}}" class="addNote" href="#modal{{this.id}}">Add your notes here:</button>
+        <div id="modal{{this.id}}" class="modal">
+            <div class="modal-content">
+                <a class="closeNote">X</a>
+                <div id="notes">Saved Notes <br></div>
+                <br>
+                <h4>New Note</h4>
+                <form>
+                    <input id="noteInput" name="body">
+                    <input data-id="{{this.id}}" class="saveNote" type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
     </li>
+    <hr>
+    <br>
+    {{/if}}
     {{/each}}
 </ul>

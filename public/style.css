@@ -1,0 +1,27 @@
+.modal {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+}
+
+.page-link {
+    font-size: 30px;
+    color: darkgreen;
+    float: right;
+    border: solid 1px darkgreen;
+    border-radius: 3px;
+    background-color: lightgreen;
+}
+
+.title {
+    font-size: 25px;
+    color: darkblue;
+}
+
+.closeNote {
+    cursor: pointer;
+}
+
+ul {
+    clear: both;
+}

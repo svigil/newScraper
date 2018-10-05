@@ -9,9 +9,6 @@ var articleSchema = new Schema({
         type: String,
         required: true
     },
-    summary: {
-        type: String
-    },
     saved: Boolean,
     url: {
         type: String,

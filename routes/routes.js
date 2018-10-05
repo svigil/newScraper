@@ -4,7 +4,9 @@ var request = require("request");
 var express = require("express");
 var router = express.Router();
 var cheerio = require("cheerio");
+var axios = require("axios");
 var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/NewScraper";
@@ -21,29 +23,30 @@ db.once("open", function () {
 });
 
 router.get("/", function (req, res) {
-    // Save an empty result object
-    var result = {};
+    request("https://www.thehackernews.com/", function (error, response, html) {
+        var $ = cheerio.load(html);
+        $("a.story-link").each(function (i, element) {
 
-    // Add the text and href of every link, and save them as properties of the result object
-    result.title = $(this)
-        .children()
-        .children()
-        .children("img")
-        .attr("alt");
-    result.link = $(this)
-        .attr("href");
+            var headline = $(element)
+                .children()
+                .children()
+                .children("img")
+                .attr("alt");
+            var url = $(element)
+                .attr("href");
 
-    // Create a new Article using the `result` object built from scraping
-    db.Article.create(result)
-        .then(function (dbArticle) {
-            // View the added result in the console
-            console.log(dbArticle);
-        })
-        .catch(function (err) {
-            // If an error occurred, send it to the client
-            return res.json(err);
+            var article = new Article({
+                headline: headline,
+                saved: false,
+                url: url
+            });
+            article.save();
         });
+        res.redirect("index");
+    });
 });
+
+
 
 router.get("/index", function (req, res) {
     Article.find({ saved: false }, function (err, Article) {
@@ -79,6 +82,40 @@ router.put("/api/index/:id", function (req, res) {
     });
 });
 
+router.put("/api/saved/:id", function (req, res) {
+    var thisId = req.params.id;
+    Article.findOneAndUpdate({ _id: thisId }, { $set: { saved: false } }, function (err, Article) {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.json(Article);
+        }
+    });
+});
 
+router.get("/saved/:id", function (req, res) {
+    Article.findOne({ _id: req.params.id })
+        .populate("notes")
+        .then(function (dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
+});
+
+router.post("/saved/:id", function (req, res) {
+    Note.create(req.body)
+        .then(function (dbNote) {
+            return Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
+        })
+        .then(function (dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
+});
 
 module.exports = router;
